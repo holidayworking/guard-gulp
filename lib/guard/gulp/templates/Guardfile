@@ -1,0 +1,4 @@
+### Guard::Gulp
+guard 'gulp' do
+  watch(%r{^gulpfile.js$})
+end
