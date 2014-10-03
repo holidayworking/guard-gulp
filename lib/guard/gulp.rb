@@ -1,5 +1,7 @@
 require 'guard'
 require 'guard/guard'
+require 'mkmf'
+require 'timeout'
 
 module Guard
   class Gulp < Guard
@@ -8,10 +10,12 @@ module Guard
     def initialize(watchers = [], options = {})
       @options = options
       @pid = nil
+      @gulp_installed = gulp_installed?
       super
     end
 
     def start
+      return unless @gulp_installed
       stop
       UI.info 'Starting gulp...'
       UI.info cmd
@@ -70,6 +74,15 @@ module Guard
 
     def env
       {}
+    end
+
+    def gulp_installed?
+      if find_executable 'gulp'
+        true
+      else
+        UI.error 'Please install gulp!'
+        false
+      end
     end
   end
 end
